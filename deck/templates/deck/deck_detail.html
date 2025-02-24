@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デッキ詳細</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <a href="{% url 'game_simulation' deck.id %}" class="btn btn-primary">Game</a>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">デッキ詳細: {{ deck.name }}</h1>
+
+        <p><strong>デッキの総枚数:</strong> {{ total_count }} 枚</p>
+        {% if over_limit %}
+        <div class="alert alert-danger" role="alert">
+            警告: デッキの総枚数が60枚を超えています!
+        </div>
+        {% endif %}
+        <h3>重要カード一覧</h3>
+        <ul>
+            {% for key_card in key_cards %}
+                <li>
+                    {{ key_card.name }} - 重要カード ({{ key_card.key_card_count }}枚)
+                </li>
+            {% empty %}
+                <li>重要カードはありません。</li>
+            {% endfor %}
+        </ul>
+        <!-- ボタンを右揃え -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'deck_delete' deck.pk %}" class="btn btn-danger me-2">デッキ削除</a>
+            <a href="{% url 'add_card' deck.pk %}" class="btn btn-success">カードを追加</a>
+        </div>
+            <a href="{% url 'deck_add_card' deck.id %}" class="btn btn-primary">カードを追加</a>
+
+        
+        <!-- サイドカードランダム配置ボタン -->
+        <form action="{% url 'random_side_cards' deck.pk %}" method="get" class="mb-4 text-end">
+            <button type="submit" class="btn btn-secondary">サイドカードランダム配置</button>
+        </form>
+
+        <!-- デッキのカード一覧 -->
+        <h3>デッキのカード</h3>
+        <ul class="list-group mb-4">
+            {% for card in deck.cards.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        {{ card.name }} - {{ card.get_category_display }} - {{ card.count }}枚
+                    </div>
+                    <div class="ms-auto">
+                        <a href="{% url 'edit_card' deck.pk card.pk %}" class="btn btn-warning btn-sm me-2">編集</a>
+                        <a href="{% url 'delete_card' deck.pk card.pk %}" class="btn btn-danger btn-sm">削除</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item">カードはありません</li>
+            {% endfor %}
+        </ul>
+    
+        <!-- カテゴリ別の枚数 -->
+        <h2>カテゴリ別の枚数</h2>
+        <ul class="list-group mb-4">
+            <li class="list-group-item">ポケモン: {{ category_counts.ポケモン }} 枚</li>
+            <li class="list-group-item">グッズ: {{ category_counts.グッズ }} 枚</li>
+            <li class="list-group-item">サポート: {{ category_counts.サポート }} 枚</li>
+            <li class="list-group-item">ポケモンのどうぐ: {{ category_counts.ポケモンのどうぐ }} 枚</li>
+            <li class="list-group-item">スタジアム: {{ category_counts.スタジアム }} 枚</li>
+            <li class="list-group-item">エネルギー: {{ category_counts.エネルギー }} 枚</li>
+        </ul>
+
+        <!-- 戻るボタン -->
+        <a href="{% url 'deck_list' %}" class="btn btn-primary mt-3">デッキリストに戻る</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

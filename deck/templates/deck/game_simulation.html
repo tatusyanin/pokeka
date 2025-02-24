@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Simulation</title>
+</head>
+<body>
+{% block content %}
+<h2>試合前シミュレーション - {{ deck.name }}</h2>
+
+<p>マリガン回数: {{ mulligan_count }}</p>
+
+<h3>手札</h3>
+<ul>
+    {% for card in hand %}
+        <li>{{ card.name }} ({{ card.category }})</li>
+    {% endfor %}
+</ul>
+
+<h3>サイドカード</h3>
+<button id="toggleSide">サイドカード表示</button>
+<ul id="sideCards" style="display: none;">
+    {% for card in side_cards %}
+        <li>{{ card.name }}</li>
+    {% endfor %}
+</ul>
+
+{% if key_card_warning %}
+    <p style="color: red;">⚠ 重要カードが {{ key_cards_in_side|length }} 枚サイドに落ちました!</p>
+{% endif %}
+
+<!-- <button onclick="window.location.href='{% url 'deck_detail' deck.id %}'">終了</button> -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let toggleButton = document.getElementById("toggleSide");
+        if (toggleButton) {
+            toggleButton.addEventListener("click", function() {
+                let sideList = document.getElementById("sideCards");
+                if (sideList) {
+                    sideList.style.display = sideList.style.display === "none" ? "block" : "none";
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
+</body>
+</html>

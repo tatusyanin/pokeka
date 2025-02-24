@@ -1,0 +1,6 @@
+<h2>新しいデッキを作成</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">デッキ作成</button>
+</form>

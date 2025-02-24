@@ -1,0 +1,15 @@
+<h1>{{ deck.name }} のサイドカードランダム配置</h1>
+
+<h3>サイドカード</h3>
+<ul>
+    {% for card in side_cards %}
+        <li>{{ card.name }} </li>
+    {% endfor %}
+</ul>
+
+<h3>サイド落ち確率: {{ side_drop_rate }}%</h3>
+
+<h3>戦略アドバイス</h3>
+<p>{{ advice }}</p>
+
+<a href="{% url 'deck_detail' deck.pk %}">デッキ詳細に戻る</a>
